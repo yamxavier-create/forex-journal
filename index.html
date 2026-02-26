@@ -8,47 +8,27 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
-    --bg: #080c10;
-    --surface: #0e1419;
-    --surface2: #141c24;
-    --border: #1e2d3d;
-    --accent: #00d4aa;
-    --bull: #00d4aa;
-    --bear: #ff4d6d;
-    --text: #e8f0f7;
-    --muted: #4a6070;
-    --gold: #f0c040;
+    --bg: #080c10; --surface: #0e1419; --surface2: #141c24;
+    --border: #1e2d3d; --accent: #00d4aa; --bull: #00d4aa;
+    --bear: #ff4d6d; --text: #e8f0f7; --muted: #4a6070; --gold: #f0c040;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    min-height: 100vh;
+    background: var(--bg); color: var(--text);
+    font-family: 'JetBrains Mono', monospace; min-height: 100vh;
     background-image: radial-gradient(ellipse at 10% 20%, rgba(0,212,170,0.04) 0%, transparent 50%),
       radial-gradient(ellipse at 90% 80%, rgba(0,153,255,0.04) 0%, transparent 50%);
   }
   .offline-banner {
-    background: rgba(240,192,64,0.1);
-    border-bottom: 1px solid var(--gold);
-    color: var(--gold);
-    padding: 8px 20px;
-    text-align: center;
-    font-size: 12px;
-    display: none;
+    background: rgba(240,192,64,0.1); border-bottom: 1px solid var(--gold);
+    color: var(--gold); padding: 8px 20px; text-align: center; font-size: 12px; display: none;
   }
   .offline-banner.show { display: block; }
   header {
-    border-bottom: 1px solid var(--border);
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(14,20,25,0.9);
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    border-bottom: 1px solid var(--border); padding: 20px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(14,20,25,0.9); backdrop-filter: blur(10px);
+    position: sticky; top: 0; z-index: 100;
   }
   .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; }
   .logo span { color: var(--accent); }
@@ -115,6 +95,50 @@
   }
   .submit-btn:hover { opacity: 0.85; transform: translateY(-1px); }
   .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* SCREENSHOTS */
+  .screenshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .screenshot-box {
+    border: 2px dashed var(--border); border-radius: 12px; min-height: 200px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+    background: var(--surface2);
+  }
+  .screenshot-box:hover { border-color: var(--accent); background: rgba(0,212,170,0.03); }
+  .screenshot-box.has-image { border-style: solid; border-color: var(--border); }
+  .screenshot-box img.preview {
+    width: 100%; height: 100%; object-fit: cover;
+    position: absolute; top: 0; left: 0; border-radius: 10px;
+  }
+  .screenshot-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.6);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s; border-radius: 10px; gap: 8px;
+  }
+  .screenshot-box.has-image:hover .screenshot-overlay { opacity: 1; }
+  .ss-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; pointer-events: none; }
+  .screenshot-box.has-image .ss-placeholder { display: none; }
+  .ss-icon { font-size: 36px; }
+  .ss-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .ss-hint { font-size: 10px; color: var(--border); }
+  .ss-tag {
+    position: absolute; top: 8px; left: 8px; background: rgba(8,12,16,0.8);
+    color: var(--accent); font-size: 9px; text-transform: uppercase; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 4px; font-family: 'Syne', sans-serif; font-weight: 700;
+  }
+  .ss-remove {
+    position: absolute; top: 8px; right: 8px; background: var(--bear);
+    border: none; color: white; border-radius: 50%; width: 26px; height: 26px;
+    cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; z-index: 10;
+  }
+  .screenshot-box.has-image .ss-remove { display: flex; }
+  .ss-progress {
+    position: absolute; bottom: 0; left: 0; height: 3px;
+    background: var(--accent); width: 0%; transition: width 0.3s; border-radius: 0 0 10px 10px;
+  }
+  input[type="file"] { display: none; }
+
+  /* TABLE */
   .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
   .table-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
   .trades-table {
@@ -126,7 +150,7 @@
     font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
     color: var(--muted); border-bottom: 1px solid var(--border);
   }
-  .trades-table td { padding: 14px 16px; font-size: 12px; border-bottom: 1px solid rgba(30,45,61,0.5); vertical-align: middle; }
+  .trades-table td { padding: 12px 16px; font-size: 12px; border-bottom: 1px solid rgba(30,45,61,0.5); vertical-align: middle; }
   .trades-table tr:last-child td { border-bottom: none; }
   .trades-table tr:hover td { background: rgba(255,255,255,0.02); }
   .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 500; }
@@ -139,16 +163,43 @@
   .pnl-neg { color: var(--bear); }
   .check { color: var(--bull); }
   .cross { color: var(--bear); }
+  .trade-thumbs { display: flex; gap: 4px; }
+  .trade-thumb {
+    width: 40px; height: 40px; border-radius: 6px; object-fit: cover;
+    cursor: pointer; border: 1px solid var(--border); transition: transform 0.2s;
+  }
+  .trade-thumb:hover { transform: scale(1.1); border-color: var(--accent); }
   .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
   .empty-state .big { font-size: 48px; margin-bottom: 12px; }
   .empty-state p { font-size: 13px; }
+  .delete-btn { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 4px 8px; border-radius: 4px; transition: color 0.2s; }
+  .delete-btn:hover { color: var(--bear); }
+
+  /* STATS */
   .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .stat-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
   .stat-val.neg { color: var(--bear); }
   .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .delete-btn { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 4px 8px; border-radius: 4px; transition: color 0.2s; }
-  .delete-btn:hover { color: var(--bear); }
+
+  /* LIGHTBOX */
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .lightbox.show { opacity: 1; pointer-events: all; }
+  .lightbox img { max-width: 90vw; max-height: 88vh; border-radius: 8px; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 24px; background: none;
+    border: none; color: white; font-size: 36px; cursor: pointer; line-height: 1;
+  }
+  .lightbox-label {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.6); color: var(--accent); padding: 6px 16px;
+    border-radius: 20px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  }
+
   .toast {
     position: fixed; bottom: 30px; right: 30px; background: var(--accent);
     color: var(--bg); padding: 14px 24px; border-radius: 10px;
@@ -156,12 +207,14 @@
     opacity: 0; transform: translateY(10px); transition: all 0.3s; z-index: 999;
   }
   .toast.show { opacity: 1; transform: translateY(0); }
+
   @media (max-width: 600px) {
     header { padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
     .header-stats { gap: 16px; }
     main { padding: 24px 16px; }
     .form-card { padding: 20px; }
     .form-grid { grid-template-columns: 1fr 1fr; }
+    .screenshot-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -178,18 +231,9 @@
     <span id="sync-label">Conectando...</span>
   </div>
   <div class="header-stats">
-    <div class="hstat">
-      <div class="hstat-val" id="hdr-trades">0</div>
-      <div class="hstat-label">Trades</div>
-    </div>
-    <div class="hstat">
-      <div class="hstat-val" id="hdr-winrate">0%</div>
-      <div class="hstat-label">Win Rate</div>
-    </div>
-    <div class="hstat">
-      <div class="hstat-val" id="hdr-pnl">0.00R</div>
-      <div class="hstat-label">Total P&L</div>
-    </div>
+    <div class="hstat"><div class="hstat-val" id="hdr-trades">0</div><div class="hstat-label">Trades</div></div>
+    <div class="hstat"><div class="hstat-val" id="hdr-winrate">0%</div><div class="hstat-label">Win Rate</div></div>
+    <div class="hstat"><div class="hstat-val" id="hdr-pnl">0.00R</div><div class="hstat-label">Total P&L</div></div>
   </div>
 </header>
 
@@ -200,6 +244,7 @@
     <button class="tab" onclick="switchTab('stats')">📊 Stats</button>
   </div>
 
+  <!-- LOG TRADE -->
   <div class="panel active" id="panel-log">
     <div class="form-card">
       <div class="form-title">New Trade — <span>Fractal Model</span></div>
@@ -267,9 +312,7 @@
           <div class="form-group">
             <label>Candle Closure</label>
             <select id="f-candle">
-              <option value="C2">Candle 2</option>
-              <option value="C3">Candle 3</option>
-              <option value="other">Other</option>
+              <option value="C2">Candle 2</option><option value="C3">Candle 3</option><option value="other">Other</option>
             </select>
           </div>
         </div>
@@ -304,18 +347,58 @@
           <div class="form-group">
             <label>Result</label>
             <select id="f-result">
-              <option value="win">✅ Win</option>
-              <option value="loss">❌ Loss</option>
-              <option value="be">⚖️ Break Even</option>
+              <option value="win">✅ Win</option><option value="loss">❌ Loss</option><option value="be">⚖️ Break Even</option>
             </select>
           </div>
           <div class="form-group"><label>P&L (in R)</label><input type="number" id="f-pnl" placeholder="2.0" step="0.1"></div>
           <div class="form-group">
             <label>Entry Type</label>
             <select id="f-entry-type">
-              <option value="close">Order Block Close</option>
-              <option value="retest">Order Block Retest</option>
+              <option value="close">Order Block Close</option><option value="retest">Order Block Retest</option>
             </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREENSHOTS -->
+      <div class="form-section">
+        <div class="section-label">📸 Screenshots del Trade</div>
+        <div class="screenshot-grid">
+          <!-- BEFORE -->
+          <div>
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Antes — Setup</div>
+            <div class="screenshot-box" id="box-before" onclick="document.getElementById('input-before').click()">
+              <div class="ss-tag">ANTES</div>
+              <div class="ss-placeholder">
+                <div class="ss-icon">📷</div>
+                <div class="ss-label">Click para subir</div>
+                <div class="ss-hint">Setup / Entry</div>
+              </div>
+              <div class="screenshot-overlay">
+                <div style="color:white;font-size:12px">🔄 Cambiar imagen</div>
+              </div>
+              <button class="ss-remove" onclick="removeImage(event,'before')">✕</button>
+              <div class="ss-progress" id="progress-before"></div>
+            </div>
+            <input type="file" id="input-before" accept="image/*" onchange="handleUpload(this,'before')">
+          </div>
+          <!-- AFTER -->
+          <div>
+            <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Después — Resultado</div>
+            <div class="screenshot-box" id="box-after" onclick="document.getElementById('input-after').click()">
+              <div class="ss-tag">DESPUÉS</div>
+              <div class="ss-placeholder">
+                <div class="ss-icon">📈</div>
+                <div class="ss-label">Click para subir</div>
+                <div class="ss-hint">Resultado / Exit</div>
+              </div>
+              <div class="screenshot-overlay">
+                <div style="color:white;font-size:12px">🔄 Cambiar imagen</div>
+              </div>
+              <button class="ss-remove" onclick="removeImage(event,'after')">✕</button>
+              <div class="ss-progress" id="progress-after"></div>
+            </div>
+            <input type="file" id="input-after" accept="image/*" onchange="handleUpload(this,'after')">
           </div>
         </div>
       </div>
@@ -331,17 +414,24 @@
     </div>
   </div>
 
+  <!-- TRADES -->
   <div class="panel" id="panel-trades">
-    <div class="table-header">
-      <div class="table-title">Trade History</div>
-    </div>
+    <div class="table-header"><div class="table-title">Trade History</div></div>
     <div id="trades-container"></div>
   </div>
 
+  <!-- STATS -->
   <div class="panel" id="panel-stats">
     <div id="stats-container"></div>
   </div>
 </main>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-label" id="lightbox-label"></div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -349,12 +439,14 @@
 const SUPABASE_URL = 'https://uuohnmwyqxzbchuvxntn.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1b2hubXd5cXh6YmNodXZ4bnRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwNzQyMjcsImV4cCI6MjA4NzY1MDIyN30.khnHl9NidxJC8KxKmOYBuh_gUgJfVnlRQPMX1k1s-V8';
 const OFFLINE_KEY = 'fractal_offline_queue';
+const BUCKET = 'trade-screenshots';
 
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let trades = [];
 let formState = { bias: '', 'poi-react': '', cisd: '', aligned: '' };
+let screenshots = { before: null, after: null }; // URLs after upload
 
 document.getElementById('f-date').valueAsDate = new Date();
 init();
@@ -389,21 +481,13 @@ async function loadTrades() {
     if (error) throw error;
     trades = data || [];
     updateHeader();
-  } catch(e) {
-    console.error(e);
-  }
+  } catch(e) { console.error(e); }
 }
 
 async function syncOfflineQueue() {
   if (!navigator.onLine) return;
   const queue = JSON.parse(localStorage.getItem(OFFLINE_KEY) || '[]');
   if (!queue.length) return;
-
-  const dot = document.getElementById('sync-dot');
-  const label = document.getElementById('sync-label');
-  dot.className = 'sync-dot syncing';
-  label.textContent = 'Sincronizando...';
-
   let synced = 0;
   for (const trade of queue) {
     const { _localId, ...cleanTrade } = trade;
@@ -412,14 +496,73 @@ async function syncOfflineQueue() {
       if (!error) synced++;
     } catch(e) {}
   }
-
   if (synced === queue.length) {
     localStorage.removeItem(OFFLINE_KEY);
     if (synced > 0) showToast(`✅ ${synced} trade(s) sincronizados!`);
   }
-
   updateSyncStatus();
   await loadTrades();
+}
+
+async function handleUpload(input, slot) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const box = document.getElementById('box-' + slot);
+  const progress = document.getElementById('progress-' + slot);
+
+  // Show local preview immediately
+  const localUrl = URL.createObjectURL(file);
+  setBoxImage(slot, localUrl);
+  progress.style.width = '30%';
+
+  if (!navigator.onLine) {
+    screenshots[slot] = null;
+    showToast('⚠️ Sin internet — screenshot no se subirá', true);
+    progress.style.width = '0%';
+    return;
+  }
+
+  try {
+    const ext = file.name.split('.').pop();
+    const filename = `${slot}_${Date.now()}.${ext}`;
+    progress.style.width = '60%';
+
+    const { data, error } = await db.storage.from(BUCKET).upload(filename, file, { upsert: true });
+    if (error) throw error;
+
+    progress.style.width = '100%';
+    const { data: urlData } = db.storage.from(BUCKET).getPublicUrl(filename);
+    screenshots[slot] = urlData.publicUrl;
+    setTimeout(() => { progress.style.width = '0%'; }, 800);
+    showToast(`✅ Screenshot "${slot === 'before' ? 'Antes' : 'Después'}" subido!`);
+  } catch(e) {
+    console.error(e);
+    progress.style.width = '0%';
+    showToast('⚠️ Error subiendo imagen', true);
+  }
+}
+
+function setBoxImage(slot, url) {
+  const box = document.getElementById('box-' + slot);
+  let img = box.querySelector('img.preview');
+  if (!img) {
+    img = document.createElement('img');
+    img.className = 'preview';
+    box.insertBefore(img, box.firstChild);
+  }
+  img.src = url;
+  box.classList.add('has-image');
+}
+
+function removeImage(e, slot) {
+  e.stopPropagation();
+  const box = document.getElementById('box-' + slot);
+  const img = box.querySelector('img.preview');
+  if (img) img.remove();
+  box.classList.remove('has-image');
+  screenshots[slot] = null;
+  document.getElementById('input-' + slot).value = '';
 }
 
 async function saveTrade() {
@@ -446,7 +589,9 @@ async function saveTrade() {
     entry_type: document.getElementById('f-entry-type').value,
     result: document.getElementById('f-result').value,
     pnl: parseFloat(document.getElementById('f-pnl').value) || 0,
-    notes: document.getElementById('f-notes').value
+    notes: document.getElementById('f-notes').value,
+    screenshot_before: screenshots.before || null,
+    screenshot_after: screenshots.after || null
   };
 
   const btn = document.getElementById('save-btn');
@@ -459,9 +604,7 @@ async function saveTrade() {
       if (error) throw error;
       showToast('✅ Trade guardado en la nube! ☁️');
       await loadTrades();
-    } catch(e) {
-      saveOffline(trade);
-    }
+    } catch(e) { saveOffline(trade); }
   } else {
     saveOffline(trade);
   }
@@ -487,9 +630,7 @@ async function deleteTrade(id) {
     await loadTrades();
     renderTrades();
     showToast('🗑 Trade eliminado');
-  } catch(e) {
-    showToast('⚠️ Error eliminando', true);
-  }
+  } catch(e) { showToast('⚠️ Error eliminando', true); }
 }
 
 function switchTab(name) {
@@ -511,6 +652,14 @@ function resetForm() {
   ['f-entry','f-sl','f-tp','f-pnl','f-notes'].forEach(id => document.getElementById(id).value = '');
   document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
   formState = { bias: '', 'poi-react': '', cisd: '', aligned: '' };
+  screenshots = { before: null, after: null };
+  ['before','after'].forEach(slot => {
+    const box = document.getElementById('box-' + slot);
+    const img = box.querySelector('img.preview');
+    if (img) img.remove();
+    box.classList.remove('has-image');
+    document.getElementById('input-' + slot).value = '';
+  });
 }
 
 function updateHeader() {
@@ -535,7 +684,7 @@ function renderTrades() {
     <table class="trades-table">
       <thead><tr>
         <th>Date</th><th>Pair</th><th>Bias</th><th>POI</th>
-        <th>CISD</th><th>Aligned</th><th>Entry</th><th>Result</th><th>P&L</th><th>Model</th><th></th>
+        <th>CISD</th><th>Aligned</th><th>Result</th><th>P&L</th><th>Screenshots</th><th></th>
       </tr></thead>
       <tbody>
         ${trades.map(t => `<tr>
@@ -545,14 +694,28 @@ function renderTrades() {
           <td>${t.poi}</td>
           <td><span class="${t.cisd === 'yes' ? 'check' : 'cross'}">${t.cisd === 'yes' ? '✓' : '✗'}</span></td>
           <td><span class="${t.aligned === 'yes' ? 'check' : 'cross'}">${t.aligned === 'yes' ? '✓' : '✗'}</span></td>
-          <td>${t.entry_type === 'close' ? 'Close' : 'Retest'}</td>
           <td><span class="badge ${t.result}">${t.result === 'win' ? '✅ Win' : t.result === 'loss' ? '❌ Loss' : '⚖️ BE'}</span></td>
           <td class="${parseFloat(t.pnl) >= 0 ? 'pnl-pos' : 'pnl-neg'}">${parseFloat(t.pnl) >= 0 ? '+' : ''}${t.pnl}R</td>
-          <td style="color:var(--muted);font-size:10px">${t.model}</td>
+          <td>
+            <div class="trade-thumbs">
+              ${t.screenshot_before ? `<img class="trade-thumb" src="${t.screenshot_before}" onclick="openLightbox('${t.screenshot_before}','Antes — Setup')" title="Antes">` : '<span style="color:var(--border);font-size:11px">—</span>'}
+              ${t.screenshot_after ? `<img class="trade-thumb" src="${t.screenshot_after}" onclick="openLightbox('${t.screenshot_after}','Después — Resultado')" title="Después">` : ''}
+            </div>
+          </td>
           <td><button class="delete-btn" onclick="deleteTrade(${t.id})">🗑</button></td>
         </tr>`).join('')}
       </tbody>
     </table>`;
+}
+
+function openLightbox(url, label) {
+  document.getElementById('lightbox-img').src = url;
+  document.getElementById('lightbox-label').textContent = label;
+  document.getElementById('lightbox').classList.add('show');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
 }
 
 function renderStats() {
